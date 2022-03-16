@@ -10,6 +10,7 @@ import {BrowserRouter as Router, Switchs, Route} from 'react-router-dom'
 import Update from './update';
 import Delete from './delete';
 import Create from './create'
+
 class App extends React.Component{
   render(){
     return(<div className='App'>   
@@ -21,6 +22,7 @@ class App extends React.Component{
           <Update/>
           <Delete/> 
           <Create/>
+         
 
     </div>)
   }

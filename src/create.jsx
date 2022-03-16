@@ -4,6 +4,10 @@ import 'react-datepicker/dist/react-datepicker.css'
 import axios from 'axios'
 import add from './images/add.jpg'
 import './allStyle/create.css'
+import {createStore,combineReducers} from 'redux'
+import * as action from './reducers/allActions/mainAction'
+import * as storr from './reducers/allStores/mainStor'
+
 
 class Create extends React.Component{
     constructor(){
@@ -24,8 +28,14 @@ class Create extends React.Component{
         this.userGender=this.userGender.bind(this)
         this.userSalary=this.userSalary.bind(this)
     }
+
+
+  
+    
+
     userName(event){
           this.setState({name:event.target.value})
+
     }
 
    employeeDate(date){
@@ -41,6 +51,8 @@ class Create extends React.Component{
    }
 
    render(){
+
+       
        return(<div className='create'>
            <div className='createOne'>
                <img src={add}/>
@@ -48,12 +60,26 @@ class Create extends React.Component{
            </div>
 
            <div className='createTwo'>
-               <div style={{color:'red'}}>{this.state.error}</div>
+               <div style={{color:'red'}}>
+                   {
+               this.state.error
+           //    stor.getState().map((val)=>{return(<div>{val.state}</div>)})
+                  }
+                  {
+                     // stor.getState()
+                  }
+               </div>
                <br/>
                <input value={this.state.name}
                       onChange={this.userName}
                       placeholder='Employee Name'/><br/>
-                      <div style={{color:'red'}}>{this.state.nameError}</div>
+                      <div style={{color:'red'}}>{
+                                  // this.state.nameError
+                                  storr.userStore.getState()
+                                 //this.nameSttor.getState()
+                                // awesomeStor.getState()
+                                   }
+                                   </div>
                       <br/>
 
                <DatePicker selected={this.state.startDate} 
@@ -64,11 +90,20 @@ class Create extends React.Component{
                <input value={this.state.gender}
                       onChange={this.userGender}
                       placeholder='Employee Gender'/>
-                   <div style={{color:'red'}}>{this.state.genderError}</div>   
+                   <div style={{color:'red'}}>
+                       {
+                      // this.state.genderError
+                      storr.store.getState()
+                       
+                       }</div>   
                <input value={this.state.salary}
                       onChange={this.userSalary}  
                       placeholder='Employee Salary'/><br/>
-                     <div style={{color:'red'}}>{this.state.salaryError}</div>  
+                     <div style={{color:'red'}}>{
+                     //this.state.salaryError
+                     }</div>  
+                      <br/>
+                      <div style={{color:'red'}}>{storr.stor.getState()}</div>
                       <br/>
                <button onClick={()=>{
                    const getValue={
@@ -77,6 +112,11 @@ class Create extends React.Component{
                        ugender:this.state.gender,
                        usalary:this.state.salary
                    }
+
+          // allInOne.mainOne.dispatch(teraName())
+           console.log(storr.stor.getState())
+           //console.log(hello)
+           
 
            if(this.state.name==='' || this.state.startDate==='' || this.state.gender==='' || this.state.salary===''){
                this.setState({error:'All Input is required'})
@@ -88,15 +128,25 @@ class Create extends React.Component{
                //const validateName=new RegExp('/^[a-zA-Z]+$/')
                if(!userNameRegex.test(this.state.name)){
                    this.setState({nameError:'Employee Name must be valid String'})
+                  storr.userStore.dispatch(action.teraName())
+                    
+                  
                       }
                 else{      
                   
-                 const genderRegex=/^[fmFM]+$/
-                 if(!genderRegex.test(this.state.gender)){
+                 const genderRegexOne=/^[M]$/
+                 const genderRegexTwo=/^[F]$/
+                 const genderRegexThree=/^[m]$/
+                 const genderRegexFour=/^[f]$/
+                 if(!(genderRegexOne.test(this.state.gender) || genderRegexTwo.test(this.state.gender) || genderRegexThree.test(this.state.gender) || genderRegexFour.test(this.state.gender))){
                      this.setState({genderError:'M or F is only allowed'})
+                    storr.store.dispatch(action.teraGender())
+                   // console.log(storTwo.getState())
                  }   
                  else{
                 if((this.state.salary*2)%2===0){
+                   
+                   //console.log(storThree.getState()) 
                    alert(getValue.uname+getValue.udate+getValue.ugender+getValue.usalary+'\n is going to be added to the data base')
                    axios.post('http://localhost:7000/employee/api/creat/employeeInfo',getValue)
                    .then((response)=>{
@@ -109,6 +159,7 @@ class Create extends React.Component{
                                        }
                                    else{
                                        this.setState({salaryError:'Salary Must be valid number'})
+                                       storr.stor.dispatch(action.teraSalary())
                                    }    
 
                                 }

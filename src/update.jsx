@@ -5,6 +5,14 @@ import edit from './images/edit.jpg'
 import axios from 'axios'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
+import styled from 'styled-components'
+import * as storr from './reducers/allStores/mainStor'
+import {createStore} from 'redux'
+
+const mainUsers={
+    updatedUsers:[]
+}
+
 class Update extends React.Component{
     constructor(){
         super();
@@ -77,11 +85,32 @@ updateInfo(id,one,two,three,four){
      
 }
 
+
+
     render(){
+        //////const dispatch=useDispatch()
+        const Btn=styled.button`
+          padding:10px;
+          
+        `
+       const Con=styled.div`
+          margin:10px;
+
+       `
+      
+
         return(<div className='update'>
             <div className='updateOne'>
                 <img src={update}/>
                 <h3>UPDATE EMPLOYEE INFO</h3>
+               <div style={{color:'red'}}>
+                   {                   
+              storr.userStore.subscribe(()=>{
+                 // console.log('hello these is from update component')
+                  console.log('these is come from updated ui'+storr.userStore.getState())
+              })
+                   }
+               </div>
                  <button onClick={()=>{
                      axios.get('http://localhost:7000/employee/api/read/employeeInfo')
                      .then((response)=>{
@@ -90,6 +119,138 @@ updateInfo(id,one,two,three,four){
                          alert('unable to update employee lists due to '+e)
                      })
                  }}>SEE EMPLOYEES</button>
+                 <Con>
+                 <Btn onClick={()=>{
+                       axios.get('http://localhost:7000/employee/api/read/employeeInfo')
+                       .then((response)=>{
+                           //this.setState({allusers:response.data})
+                         console.log(storr.responseState.getState())
+                         const userField=storr.responseState.dispatch({type:'GET_USER_REQUEST',users:response.data})
+                         mainUsers.updatedUsers=userField.users
+                         console.log(mainUsers.updatedUsers)
+                        }).catch((e)=>{
+                           alert('unable to update employee lists due to '+e)
+                       })
+
+                     }}>SAGA UPDATE</Btn>
+                 </Con> 
+                 
+                 {
+                 mainUsers.updatedUsers.map((val)=>{
+                     return(<div>
+                               <table>
+
+                   <tr>
+                     <th>Employee Name</th>
+                     <th>Date of Birth</th>
+                     <th>Gender</th>
+                     <th>salary</th>
+                  </tr>
+                  <tr>
+                     <td>{val.employeeName}</td>
+                     <td>{val.employeeBirth}</td>
+                     <td>{val.employeeGender}</td>
+                     <td>{val.employeeSalary} <img src={edit} onClick={()=>{
+                         this.updateInfo(val._id,val.employeeName,val.employeeBirth,val.employeeGender,val.employeeSalary)
+                         alert("employee "+val.employeeName+" is going to be updating") 
+                   this.setState({
+                          id:val._id,
+                          name:val.employeeName,
+                          birth:val.employeeBirth,
+                          gender:val.employeeGender,
+                          salary:val.employeeSalary})                          
+                      }}/></td>
+    
+              </tr>
+                 </table>
+ 
+
+ 
+                       <div className='edit'>
+
+
+                              <div className='editTwo'>
+                                  <h3>UPDATE EMPLOYEE INFO</h3>
+                                  <div style={{color:'red'}}>{this.state.newRequired}</div><br/>                
+                                  <input value={this.state.newName}
+                                       onChange={this.userNewName}
+                                       placeholder={this.state.name}/><br/>
+                              <div style={{color:'red'}}>{this.state.newNameError}</div>
+                  <DatePicker selected={this.state.newBirth} 
+                    onChange={this.userNewBirth}
+                    name='Date of Birth'
+                    placeholderText={this.state.birth}
+                    dateFormat="m/d/yyyy"/>
+             <input value={this.state.newGender}
+                onChange={this.userNewGender}
+                placeholder={this.state.gender}/><br/>
+                <div style={{color:'red'}}>{this.state.newGenderError}</div>
+                <input value={this.state.newSalary}
+                    onChange={this.userNewSalary}
+                    placeholder={this.state.salary}/><br/>
+                    <div style={{color:'red'}}>{this.state.newSalaryError}</div> 
+                      <button onClick={()=>{
+                         const allValues={
+                            newEmployeeName:this.state.newName,
+                            newEmployeeBirth:this.state.newBirth,
+                            newEmployeeGender:this.state.newGender,
+                            newEmployeeSalary:this.state.newSalary
+                                        }
+
+
+if(this.state.newName==='' || this.state.newBirth==='' || this.state.newGender==='' || this.state.newSalary===''){
+this.setState({newRequired:'All input fileds are required'})
+}                     
+else{   
+const cheakNameValue=/^[a-z A-Z]+$/
+if(!cheakNameValue.test(this.state.newName)){
+this.setState({newNameError:'only proper name is allowed'})
+}  
+else{
+const genExp=/^[mfMF]+$/
+if(!genExp.test(this.state.newGender)){
+this.setState({newGenderError:'M or F is only allowed'})
+}
+
+else{
+if(!((this.state.newSalary*2)%2===0)){
+this.setState({newSalaryError:'only numbers with out decimal is allowed'})
+}
+else{
+//send the employee info to the database for updating purpose
+axios.put('http://localhost:7000/employee/api/update/employeeInfo/'+this.state.id,allValues)
+.then((response)=>{
+console.log(response.data)
+alert('Employee '+this.state.name+' updated succesfully')
+document.querySelector('.edit').style.display='none'
+window.location.reload()
+}).catch((e)=>{
+alert("updating problems "+e)
+}) 
+  }
+
+}
+
+}
+}                       
+
+}}>UPDATE</button>
+<button onClick={()=>{
+document.querySelector('.edit').style.display='none'
+}}>CANCEL</button>
+</div>
+</div>
+
+
+                        
+                         <br/><br/><br/><br/>   
+                         </div>)
+                 })
+                 }
+     
+
+
+
                  {
                      this.state.allusers.map((val)=>{
                          return(<div className='response'>
