@@ -3,6 +3,8 @@ import axios from 'axios'
 import remove from './images/remove.png'
 import './allStyle/delete.css'
 import rem from './images/rem.png'
+import * as storr from './reducers/allStores/mainStor'
+import * as action from './reducers/allActions/mainAction'
 
 class Delete extends React.Component{
      constructor(){
@@ -30,16 +32,22 @@ class Delete extends React.Component{
                 <img src={remove}/>
                 <h3>REMOVE EMPLOYEE</h3>
                 <button onClick={()=>{
+                    /*
                     axios.get('http://localhost:7000/employee/api/read/employeeInfo')
                     .then((response)=>{
                         this.setState({users:response.data})
                     }).catch((e)=>{
                         alert('unable to send the request due to '+e)
                     })
+                    */
+                   storr.responseState.dispatch(action.user_delete_request())
+                   console.log(storr.responseState.getState())
+                   
                 }}>USER LISTS</button>
             </div>
               {
-               this.state.users.map((valueResponse)=>{
+              storr.responseState.getState().users.map((valueResponse)=>{    
+               //this.state.users.map((valueResponse)=>{
                    return(<div className='remove'>
                        <table border='1'>
                            <tr>

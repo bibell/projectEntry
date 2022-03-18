@@ -147,7 +147,7 @@ class Create extends React.Component{
                 if((this.state.salary*2)%2===0){
                    
                    //console.log(storThree.getState()) 
-                   alert(getValue.uname+getValue.udate+getValue.ugender+getValue.usalary+'\n is going to be added to the data base')
+                   /*alert(getValue.uname+getValue.udate+getValue.ugender+getValue.usalary+'\n is going to be added to the data base')
                    axios.post('http://localhost:7000/employee/api/creat/employeeInfo',getValue)
                    .then((response)=>{
                        alert('employee has been created sucessfully...')
@@ -156,6 +156,11 @@ class Create extends React.Component{
                    }).catch((e)=>{
                        alert('unable to send the requiest due to '+e)
                    })
+                   */
+                  storr.responseState.dispatch(action.user_create_request())
+                  console.log(storr.responseState.getState())
+                  alert(storr.responseState.getState().users.message)   
+
                                        }
                                    else{
                                        this.setState({salaryError:'Salary Must be valid number'})
@@ -167,6 +172,7 @@ class Create extends React.Component{
               }
                    
                }}>ADD EMPLOYEE</button>
+              
            </div>
        </div>)
    }

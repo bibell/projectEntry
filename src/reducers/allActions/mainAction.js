@@ -1,14 +1,16 @@
+import {typee} from '../allType'
+import { view } from '../../saga/fatchRequest'
 //create the second actions
 export const teraName=()=>{
     return{
-        type:'userName'
+        type:typee.USER_NAME
     }
 }
 
 //create the third action
 export const teraGender=()=>{
     return{
-        type:'userGender'
+        type:typee.USER_GENDER
     }
 
 }
@@ -16,7 +18,7 @@ export const teraGender=()=>{
 //create the other action
 export const teraSalary=()=>{
     return{
-        type:'userSalary'
+        type:typee.USER_SALARY
     }
 }
 
@@ -27,16 +29,37 @@ export const gain=(ress)=>{
     }
 }
 
-export const user_get_request=(post)=>{
+export const user_get_request=()=>{
     return {
-        type:'USER_GET_REQUEST',
-        users:[post]
+        type:typee.USER_READ_REQUEST,
+        payload:view.readUsers
+    }
+}
+
+export const user_create_request=()=>{
+     return{
+         type:typee.USER_CREATE_REQUEST,
+         payload:view.createUsers
+     }
+}
+
+export const user_update_request=()=>{
+    return{
+        type:typee.USER_UPDATE_REQUEST,
+        payload:view.updateUsers
+    }
+}
+
+export const user_delete_request=()=>{
+    return{
+        type:typee.USER_DELETE_REQUEST,
+        payload:view.deleteUsers
     }
 }
 
 export const user_fail=(error)=>{
     return{
-        type:'USER_FAIL',
+        type:typee.USER_FAIL,
         message:error
     }
 }

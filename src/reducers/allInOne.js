@@ -1,8 +1,10 @@
 import {allRequest} from '../saga/handlingApiRequest'
+import {typee} from './allType'
+import * as allActions from './allActions/mainAction' 
 //create reducer function that used for user salary
 export const reducer=(state='',action)=>{
   
-     if(action.type==='userSalary'){
+     if(action.type===typee.USER_SALARY){
         return state='salary must be number'
      }else{
          return state
@@ -12,14 +14,14 @@ export const reducer=(state='',action)=>{
  
  //now create the second reducers
  export const secondReducer=(state='',action)=>{
-     if(action.type==='userGender'){
+     if(action.type===typee.USER_GENDER){
          return state='M or F is only allowed'
      }
  }
  
  
  export const nameReducer=(state='',action)=>{
-     if(action.type==='userName'){
+     if(action.type===typee.USER_NAME){
          return state='user name must be valid string'
      }
      else{
@@ -30,14 +32,37 @@ export const reducer=(state='',action)=>{
  //create the reducer that hanldes the database response
  
  export const responseReducers=(state={users:[],error:''},action)=>{
-     if(action.type==='USER_GET_REQUEST'){
-         return {...state,users:action.userRequest}
+     if(action.type===typee.USER_READ_REQUEST){
+         return {...state,users:action.payload}
      }
-     else if(action.type==='USER_FAIL'){
+     else if(action.type===typee.USER_CREATE_REQUEST){
+         return{
+             ...state,
+             users:action.payload
+         }
+     }
+
+     else if(action.type===typee.USER_UPDATE_REQUEST){
+         return{
+             ...state,
+             users:action.payload
+         }
+     }
+
+     else if(action.type===typee.USER_DELETE_REQUEST){
+         return{
+             ...state,
+             users:action.payload
+         }
+     }
+     else if(action.type===typee.USER_FAIL){
          return {...state,error:action.e}
      }
      else{
          return state
      }
  }
+
+
+ 
  

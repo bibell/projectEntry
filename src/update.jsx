@@ -8,6 +8,8 @@ import 'react-datepicker/dist/react-datepicker.css'
 import styled from 'styled-components'
 import * as storr from './reducers/allStores/mainStor'
 import {createStore} from 'redux'
+import * as action from './reducers/allActions/mainAction'
+import * as storee from './reducers/allStores/mainStor'
 
 const mainUsers={
     updatedUsers:[]
@@ -112,12 +114,18 @@ updateInfo(id,one,two,three,four){
                    }
                </div>
                  <button onClick={()=>{
+                    /* 
                      axios.get('http://localhost:7000/employee/api/read/employeeInfo')
                      .then((response)=>{
                          this.setState({allusers:response.data})
                      }).catch((e)=>{
                          alert('unable to update employee lists due to '+e)
                      })
+                     */
+
+                     storee.responseState.dispatch(action.user_update_request())
+                     console.log(storee.responseState.getState())
+
                  }}>SEE EMPLOYEES</button>
                  <Con>
                  <Btn onClick={()=>{

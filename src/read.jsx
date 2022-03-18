@@ -7,6 +7,7 @@ import * as actions from './reducers/allActions/mainAction'
 import {allRequest} from './saga/handlingApiRequest'
 import { useDispatch,useSelector } from 'react-redux'
 import AppSaga from './sagaApp'
+import {typee} from './reducers/allType'
 
 const sing=storeRes.responseState.getState()
 console.log(sing)
@@ -27,9 +28,13 @@ class Read extends React.Component{
                 <img src={division}/>
                 <h3>SEE WHO WORK IN ADDIS</h3>
                    
-                 <button onClick={()=>{
+               <button onClick={()=>{
+                  // const dispatch=useDispatch()
+                    console.log(storeRes.responseState.getState())
+                    storeRes.responseState.dispatch(actions.user_get_request())  
                    
-                  
+                    console.log(storeRes.responseState.getState().users)   
+                  /*
                     axios.get('http://localhost:7000/employee/api/read/employeeInfo')
                     .then((response)=>{
                         //this.setState({users:response.data})                        
@@ -41,14 +46,15 @@ class Read extends React.Component{
 
                     }).catch((e)=>{
                       alert('unable to send the request due to '+e)
-                    })
+                    })*/
                 }}>LIST OF EMPLOYEES</button>
             </div>
             <div className='employeeTable'>
+               
                 {
-                /*    
-                  //[storeRes.responseState.getState()].map((val)=>{
-                  this.state.users.map((val)=>{
+                  
+                  storeRes.responseState.getState().users.map((val)=>{
+                 // this.state.users.map((val)=>{
                         return(<div className='employeeTableOne'>
                             <table border='1'>
                                 <tr>
@@ -66,7 +72,7 @@ class Read extends React.Component{
                             </table>
                         </div>)
                     })
-                  */
+                  
                 }
             </div>
            
